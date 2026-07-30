@@ -383,6 +383,12 @@ class Markdown:
                 # be used (via self.extras) but you haven't provided anything
                 # via the link_patterns argument then an error is raised
                 raise MarkdownError("If the 'link-patterns' extra is used, an argument for 'link_patterns' is required")
+            normalized_link_patterns = []
+            for pattern, href in link_patterns:
+                if isinstance(pattern, str):
+                    pattern = _regex_from_encoded_pattern(pattern)
+                normalized_link_patterns.append((pattern, href))
+            link_patterns = normalized_link_patterns
             self.extras['link-patterns'] = link_patterns
 
         self._instance_extras = self.extras.copy()

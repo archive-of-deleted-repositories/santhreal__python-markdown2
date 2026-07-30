@@ -375,6 +375,20 @@ versions of markdown2.py this was pathologically slow:</p>
 </ul>
 """
         self.assertEqual(expected_toc_html, md.convert(html).toc_html)
+    def test_link_patterns_string_regex(self):
+        patterns = [
+            (r"/bug (\d+)/i", r"http://bugs.example.com/\1"),
+            (r"/pep-(\d+)/", r"http://peps.example.com/\1"),
+        ]
+        html = markdown2.markdown(
+            "See BUG 123 and pep-456.",
+            extras=["link-patterns"],
+            link_patterns=patterns,
+        )
+        self.assertEqual(
+            html,
+            '<p>See <a href="http://bugs.example.com/123">BUG 123</a> and <a href="http://peps.example.com/456">pep-456</a>.</p>\n',
+        )
     test_toc_with_persistent_object.tags = ["toc", "issue208"]
 
 
